@@ -1,10 +1,49 @@
 import React, { useState } from 'react'
 
-const Button = ({onClick, text}) => {
-  
+const Anecdotes = ({head, anecdote}) => {
   return (
     <>
-    
+      <h2>{head}</h2>
+      <p>
+        {anecdote}
+      </p>
+    </>
+  )
+}
+
+const MostVotedAnecdote = ({head, anecdote, vote}) => {
+  
+    if(vote === 0) {
+      return <p></p>;
+    }
+    return(
+      <>
+      <Anecdotes head={head} anecdote={anecdote} />
+      <Votes vote={vote} />
+      </>
+    )
+    /* <>
+      <h2>{head}</h2>
+      <p>
+        {anecdote}
+      </p>
+    </> */
+}
+
+const Votes = ({vote}) => {
+  if(vote === 1) {
+    return <p>has {vote} vote</p>
+  }
+  return(
+    <p>
+      has {vote} votes
+    </p>
+  )
+}
+
+const Button = ({onClick, text}) => {
+  return (
+    <>
     <button onClick={onClick}>{text}</button>
     </>
   )
@@ -34,22 +73,28 @@ const App = () => {
   }
 
   const increaseVote = () => {
+    
+    setMostVotes(voteClick.indexOf(Math.max(Math.max(...voteClick))))
+    console.log(mostvotes)
     let copy = [...voteClick];
     copy[selected]+= 1;
     setVoteClick(copy);
     console.log(copy)
+    
   };
-
   
-  
- 
-
   return (
     <div>
-      <p>{anecdotes[selected]} </p>
-      <p>has {voteClick[selected]} votes</p>
-      <button onClick={increaseVote}>vote</button>
+      <Anecdotes anecdote={anecdotes[selected]} head={"Anecdote of the day"} />
+      <Votes vote={voteClick[selected]} />
+      <Button onClick={increaseVote} text="vote" />
       <Button onClick={random} text="next anecdote" />
+      
+      <MostVotedAnecdote head="Anecdote with most votes" 
+        anecdote={anecdotes[mostvotes]}
+        vote={voteClick[mostvotes]} 
+      />
+      
     </div>
   )
 }
